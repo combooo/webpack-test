@@ -26,7 +26,15 @@ const optimization = () => {
     return config;
 }
 
-const filename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`
+const filename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`;
+
+const cssLoaders = extraLoader => {
+    const loaders = [MiniCssExtractPlugin.loader, "css-loader"];
+    if (extraLoader) {
+        loaders.push(extraLoader);
+    }
+    return loaders;
+}
 
 module.exports = {
     target: 'web',
@@ -103,11 +111,15 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/i,
-                use: [MiniCssExtractPlugin.loader, "css-loader"],
+                use: cssLoaders(),
             },
             {
                 test: /\.less$/i,
-                use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
+                use: cssLoaders("less-loader"),
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: cssLoaders("sass-loader"),
             },
             {
                 test: /\.(png|jpg|svg|gif)$/,

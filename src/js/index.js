@@ -2,6 +2,7 @@ import * as $ from 'jquery';
 import Post from '@modules/Post';
 import '@/styles/styles.css';
 import '@/styles/less.less';
+import '@/styles/scss.scss';
 
 import WebPackLogo from '@/assets/logo.png';
 import xmlFile from '@/assets/data.xml';
