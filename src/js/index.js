@@ -1,6 +1,8 @@
 import * as $ from 'jquery';
 import Post from '@modules/Post';
 import '@/styles/styles.css';
+import '@/styles/less.less';
+
 import WebPackLogo from '@/assets/logo.png';
 import xmlFile from '@/assets/data.xml';
 import csvFile from '@/assets/omon-minsk.csv';

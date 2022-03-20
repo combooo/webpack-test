@@ -26,6 +26,8 @@ const optimization = () => {
     return config;
 }
 
+const filename = ext => isDev ? `[name].${ext}` : `[name].[hash].${ext}`
+
 module.exports = {
     target: 'web',
     context: path.resolve(__dirname, 'src'), // folder where all dev files are located
@@ -48,7 +50,7 @@ module.exports = {
         /*
         * [name] - means to put name of entry points to output files, if entry * points are more than 1. [contenthash] means to create hash in name of * output files, depending on their content.
         */
-        filename: '[name].[contenthash].js', 
+        filename: filename('js'), 
 
         path: path.resolve(__dirname, 'dist')
     },
@@ -87,8 +89,7 @@ module.exports = {
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional
-            filename: "[name].css",
-            chunkFilename: "[id].css",
+            filename: filename('css')
         }),
     ],
     devServer: {
@@ -103,6 +104,10 @@ module.exports = {
             {
                 test: /\.css$/i,
                 use: [MiniCssExtractPlugin.loader, "css-loader"],
+            },
+            {
+                test: /\.less$/i,
+                use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
             },
             {
                 test: /\.(png|jpg|svg|gif)$/,
