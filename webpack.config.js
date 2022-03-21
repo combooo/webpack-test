@@ -51,7 +51,7 @@ module.exports = {
     */
     entry: {
         main: ["@babel/polyfill", './js/index.js'],
-        analytics: './js/analytics.js'
+        analytics: './js/analytics.ts'
     },
 
     output: {
@@ -144,6 +144,19 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['@babel/preset-env']
+                    }
+                }
+            },
+            {
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            '@babel/preset-env',
+                            "@babel/preset-typescript"
+                        ]
                     }
                 }
             }
