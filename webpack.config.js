@@ -36,6 +36,12 @@ const cssLoaders = extraLoader => {
     return loaders;
 }
 
+const babelOptions = () => {
+    return {
+        
+    }
+}
+
 module.exports = {
     target: 'web',
     context: path.resolve(__dirname, 'src'), // folder where all dev files are located
@@ -159,7 +165,21 @@ module.exports = {
                         ]
                     }
                 }
-            }
+            },
+            {
+                test: /\.jsx$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            '@babel/preset-env',
+                            '@babel/preset-react'
+                        ]
+                    }
+                }
+            },
+            
         ]
     }
 }
