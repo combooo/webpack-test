@@ -8,6 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
@@ -35,6 +36,45 @@ const cssLoaders = extraLoader => {
         loaders.push(extraLoader);
     }
     return loaders;
+}
+
+const plugins = () => {
+    const base = [
+
+        /**
+         * Plugin for creating index.html
+         */
+
+        new HtmlWebpackPlugin({
+            title: 'webpack test', // <title> webpack test </title>
+            template: './index.html', // template of html structure
+            minify: { // minimize
+                collapseWhitespace: isProd // true or false
+            }
+        }),
+
+        new CleanWebpackPlugin(), // cleans old vesrions of output files
+        new CopyWebpackPlugin({
+            patterns: [
+                { 
+                    from: path.resolve(__dirname, 'src/favicon.ico'),
+                    to: path.resolve(__dirname, "dist")
+                },
+            ],
+        }),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: filename('css')
+        }),
+        new ESLintPlugin()
+    ]
+
+    if(isProd) {
+        base.push(new BundleAnalyzerPlugin());
+    }
+    
+    return base;
 }
 
 module.exports = {
@@ -72,36 +112,7 @@ module.exports = {
         }
     },
     optimization: optimization(),
-    plugins: [
-
-        /**
-         * Plugin for creating index.html
-         */
-
-        new HtmlWebpackPlugin({
-            title: 'webpack test', // <title> webpack test </title>
-            template: './index.html', // template of html structure
-            minify: { // minimize
-                collapseWhitespace: isProd // true or false
-            }
-        }),
-
-        new CleanWebpackPlugin(), // cleans old vesrions of output files
-        new CopyWebpackPlugin({
-            patterns: [
-                { 
-                    from: path.resolve(__dirname, 'src/favicon.ico'),
-                    to: path.resolve(__dirname, "dist")
-                },
-            ],
-        }),
-        new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
-            filename: filename('css')
-        }),
-        new ESLintPlugin()
-    ],
+    plugins: plugins(),
     devServer: {
         static: {
             directory: path.join(__dirname, 'src'),
